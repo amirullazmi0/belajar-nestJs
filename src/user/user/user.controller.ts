@@ -4,13 +4,16 @@ import { json } from 'stream/consumers';
 
 @Controller('/api/user')
 export class UserController {
-    @Post()
-    post(): String {
-        return 'POST'
-    }
 
+    @Get('/view')
+    viewHello(@Query("name") name: string, @Res() response: Response) {
+        response.render('index.html', {
+            title: 'template engine',
+            name: name
+        })
+    }
     @Get('/hello')
-    async sayHello(@Query("name") name: String, @Query("age") age: number,) {
+    async sayHello(@Query("name") name: string, @Query("age") age: number,) {
         try {
             return `Hello ${name}, umur anda ${age}`
         } catch (error) {
