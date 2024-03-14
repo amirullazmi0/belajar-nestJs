@@ -4,11 +4,6 @@ import { json } from 'stream/consumers';
 
 @Controller('/api/user')
 export class UserController {
-    @Post()
-    post(): String {
-        return 'POST'
-    }
-
     @Get('/hello')
     async sayHello(@Query("name") name: String, @Query("age") age: number,) {
         try {
