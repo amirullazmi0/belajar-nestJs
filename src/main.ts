@@ -5,12 +5,8 @@ import * as mustache from 'mustache-express'
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create(AppModule);
   app.use(cookieParser('Rahasia'));
-
-  app.set('views', __dirname + '/../views');
-  app.set('view engine', 'html');
-  app.engine('html', mustache());
 
   await app.listen(3000);
 }

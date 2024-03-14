@@ -1,21 +1,36 @@
-import { Controller, Get, Header, HttpCode, Post, Query, Req, Res } from '@nestjs/common';
+import { Controller, Get, Header, HttpCode, Inject, Optional, Post, Query, Req, Res } from '@nestjs/common';
 import { Request, Response } from "express";
 import { json } from 'stream/consumers';
+import { UserService } from './user.service';
+import { Connection } from '../connection/connection';
+import { MailService } from '../mail/mail.service';
+import { UserRapository } from '../user-rapository/user-rapository';
 
 @Controller('/api/user')
 export class UserController {
+    constructor(
+        private service: UserService,
+        private connection: Connection,
+        private mailService: MailService,
+        private userRepository: UserRapository,
+        @Inject('EmailService') private emailService: MailService
+    ) { }
+
     @Post()
     post(): String {
         return 'POST'
     }
 
     @Get('/hello')
-    async sayHello(@Query("name") name: string, @Query("age") age: number,) {
-        try {
-            return `Hello ${name}, umur anda ${age}`
-        } catch (error) {
-
-        }
+    async sayHello(@Query("name") name: string) {
+        return this.service.sayHello(name)
+    }
+    @Get('/connection')
+    async getConnection(): Promise<string> {
+        this.mailService.send()
+        this.userRepository.save()
+        this.emailService.send()
+        return this.connection.getName()
     }
 
     @Get('/set-cookie')
